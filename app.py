@@ -16,15 +16,17 @@ from tkinter import messagebox  # Use messagebox instead of simpledialog
 from cryptography.hazmat.primitives import serialization
 import hashlib
 
+
 class CustomDialog:
     def __init__(self, private_key):
         self.private_key = private_key
         self.message = "Here is your hashed private key:"
-        # self.hashed_key = self.hash_private_key()
 
     def show_dialog(self):
-        result = messagebox.showinfo("Hashed Private Key", f"{self.message}\n\n {self.private_key}")
+        result = messagebox.showinfo(
+            "Hashed Private Key", f"{self.message}\n\n {self.private_key}")
         return result
+
 
 # Example usage:
 if __name__ == "__main__":
@@ -33,12 +35,10 @@ if __name__ == "__main__":
     dialog.show_dialog()
 
 
-
-
-
 class App:
     timer = 10
-    def __init__(self, screen="None", gameManager=None ,username="", enc_message="mess",   hardness=1, enc_instace = None):
+
+    def __init__(self, screen="None", gameManager=None, username="", enc_message="mess",   hardness=1, enc_instace=None):
         self
         pg.init()
         score = 200 if hardness == 1 else (500 if hardness == 2 else 1000)
@@ -50,10 +50,8 @@ class App:
         self.encrypted_message = enc_message
         with open("file.key", "rb") as key:
             self.private_key = key.read()
-        hardness =hardness
-        self.ANIM_TIME_INTERVAL =150
-
-        
+        hardness = hardness
+        self.ANIM_TIME_INTERVAL = 150
 
         self.hardness = int(hardness)
         self.screen = screen
@@ -61,36 +59,26 @@ class App:
         self.clock = pg.time.Clock()
         self.set_timer()
         self.images = self.load_images()
-        self.enc_instace=enc_instace
-        dialog = CustomDialog(self.private_key_to_10_digits(self.enc_instace.private_key))
+        self.enc_instace = enc_instace
+        dialog = CustomDialog(self.private_key_to_10_digits(
+            self.enc_instace.private_key))
         dialog.show_dialog()
 
         self.tetris = Tetris(self, enc_instace)
         self.text = Text(self)
         self.score = 0
-        self.timer = 10  
-        self.required_time = 1000  
+        self.timer = 10
+        self.required_time = 1000
         self.manager = pygame_gui.UIManager((WIN_W, WIN_H))
         self.display_game_over = False
         self.expected_score_reached = False
         self.plainmsg = None
 
-
-
-
         self.total_score = 1000 + score
         self.cumulative_score = 0
         self.cumulative_score_valve = False
         self.encrypted_message_checker = True
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
     def private_key_to_10_digits(self, private_key):
         private_key_bytes = private_key.private_bytes(
             encoding=serialization.Encoding.DER,
@@ -106,16 +94,16 @@ class App:
     def game_over(self, status):
         pg.font.init()
         font = pg.font.Font(None, 36)
-        message = f"Hello {self.username}\n"        
+        message = f"Hello {self.username}\n"
         message += "Congratulations! Message decrypted! You got lucky though."
         self.encrypted_message_checker = False
         self.decryption_message = f"\nDecrypted Message: \n{self.insert_newline_every_10_characters(self.tetris.decrypted())}"
-        message +="\n"
-        message +="\n"
-        message +="\n"
+        message += "\n"
+        message += "\n"
+        message += "\n"
         message += self.decryption_message
-        message +="\n"
-        message +="\n"
+        message += "\n"
+        message += "\n"
         message += "\nPress R to Continue or Q to quit."
         while True:
             for event in pg.event.get():
@@ -138,7 +126,8 @@ class App:
             text_rect = text.get_rect(center=(WIN_W // 2, WIN_H // 3))
             self.screen.blit(text, text_rect)
             if self.expected_score_reached:
-                text = font.render(self.decryption_message, True, (255, 255, 255))
+                text = font.render(self.decryption_message,
+                                   True, (255, 255, 255))
                 text_rect = text.get_rect(center=(WIN_W // 2, WIN_H // 2))
                 self.screen.blit(text, text_rect)
             pg.display.update()
@@ -147,6 +136,7 @@ class App:
             text_rect = text.get_rect(center=(WIN_W // 2, WIN_H // 3))
             self.screen.blit(text, text_rect)
             pg.display.update()
+
     def restart_game(self, status):
         self.tetris.valve = True
         if status == "win":
@@ -156,9 +146,8 @@ class App:
         else:
             self.expected_score_reached = False
             self.required_score = self.required_score  # Add 200 to the required score
-            
-            
-    def insert_newline_every_10_characters(self,input_string):
+
+    def insert_newline_every_10_characters(self, input_string):
         result = ""
         for i, char in enumerate(input_string, start=1):
             result += char
@@ -168,9 +157,11 @@ class App:
 
     def display_decrypted_message(self):
         self.screen.fill(BG_COLOR)  # Clear the screen
+
     def quit_game(self):
         pg.quit()
         sys.exit()
+
     def load_images(self):
         files = [item for item in pathlib.Path(
             SPRITE_DIR_PATH).rglob('*.png') if item.is_file()]
@@ -178,6 +169,7 @@ class App:
         images = [pg.transform.scale(
             image, (TILE_SIZE, TILE_SIZE)) for image in images]
         return images
+
     def set_timer(self):
         self.user_event = pg.USEREVENT + 0
         self.fast_user_event = pg.USEREVENT + 1
@@ -185,11 +177,12 @@ class App:
         self.fast_anim_trigger = False
         pg.time.set_timer(self.user_event, self.ANIM_TIME_INTERVAL)
         pg.time.set_timer(self.fast_user_event, FAST_ANIM_TIME_INTERVAL)
+
     def update(self):
         self.tetris.update()
         self.required_time -= 1 / FPS
         if self.expected_score_reached:
-            self.display_game_over =True
+            self.display_game_over = True
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                 if self.display_game_over:
@@ -207,12 +200,14 @@ class App:
             self.tetris.draw()
             self.text.draw()
             pg.display.flip()
+
     def draw(self):
         self.screen.fill(color=BG_COLOR)
         self.screen.fill(color=FIELD_COLOR, rect=(0, 0, *FIELD_RES))
         self.tetris.draw()
         self.text.draw()
         pg.display.flip()
+
     def check_events(self):
         self.anim_trigger = False
         self.fast_anim_trigger = False
@@ -226,6 +221,7 @@ class App:
                 self.anim_trigger = True
             elif event.type == self.fast_user_event:
                 self.fast_anim_trigger = True
+
     def run(self):
         while self.timer > 0:  # Check the timer
             self.check_events()
@@ -235,6 +231,7 @@ class App:
             # Check if decryption conditions are met
             if self.score >= self.required_score and self.timer >= 0:
                 self.encrypted_message = self.text.encrypted_message
+
 
 if __name__ == '__main__':
     app = App()

@@ -42,7 +42,7 @@ class Game:
 
                 with open("data/data1.txt", "r") as file:
                     self.hardness = int(file.read())
-                self.plain_text = self.get_random_cryptography_message()
+                self.plain_text = self.intro.message
                 
                 
                 
@@ -55,33 +55,6 @@ class Game:
             pygame.display.update()
             self.clock.tick(FPS)
     import random
-
-    def get_random_cryptography_message(self):
-        cryptography_messages = [
-            "Encrypt your ambitions with determination; decryption reveals success.",
-            "Life's algorithm: iterate, adapt, overcome.",
-            "Code your destiny with bytes of resilience and passion.",
-            "Debugging life: turning setbacks into breakthroughs.",
-            "Success: a compilation of compiled efforts.",
-            "Master the code of silence; let success be the noise.",
-            "Compile dreams, execute goals, and debug obstacles.",
-            "Navigate the binary seas of challenges with a byte-sized ship of courage.",
-            "Crack the code of happiness, one positive bit at a time.",
-            "In the coding of life, perseverance is the syntax of success.",
-            "Adapt to change; it's the only constant in the algorithm of life.",
-            "Life's encryption key: positive mindset, resilience, and relentless effort.",
-            "Dance with bugs, embrace glitches, and code your way to success.",
-            "Decrypt negativity; encrypt positivity into your life's source code.",
-            "Life's API: Acceptance, Patience, and Initiative.",
-            "Optimize your life's code for efficiency and fulfillment.",
-            "In the matrix of challenges, become the architect of your success.",
-            "Life's protocol: innovate, iterate, and elevate.",
-            "Debugging the code of life: find joy in the unexpected exceptions.",
-            "Compile a life of purpose, run it with passion, and debug with wisdom."
-        ]
-        
-        return random.choice(cryptography_messages)
-
 
 
 

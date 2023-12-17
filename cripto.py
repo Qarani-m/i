@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives import serialization
 import os
 import hashlib
 
+
 class MessageEncryptionApp:
     def __init__(self, password):
 
@@ -30,9 +31,7 @@ class MessageEncryptionApp:
         )
         key = kdf.derive(password.encode())
         return key
-    
-    
-    
+
     def private_key_to_10_digits(private_key):
         private_key_bytes = private_key.private_bytes(
             encoding=serialization.Encoding.DER,
@@ -42,16 +41,11 @@ class MessageEncryptionApp:
 
         sha256 = hashlib.sha256()
         sha256.update(private_key_bytes)
-        
+
         # Extract the first 10 digits of the hash
         result = int(sha256.hexdigest()[:10], 16)
-        
+
         return result
-
-
-
-
-
 
     def encrypt_message(self, message):
         msg_bytes = message.encode("utf-8")

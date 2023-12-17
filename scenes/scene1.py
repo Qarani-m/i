@@ -98,7 +98,7 @@ class IntroScene:
         press_e_button = Button((screen_width - 230) // 2, 550, 200, 40, "Press Shift ctrl", self.gameStateManager)
         press_b_button = Button((screen_width - 300) // 2, 950, 400, 40, "Please fill all the fields", self.gameStateManager)
         
-        inputs = [username_input]
+        inputs = [username_input,message_input]
         buttons = [press_e_button]
         
         

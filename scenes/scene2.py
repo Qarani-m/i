@@ -61,7 +61,6 @@ class Button:
         text_surface = self.font.render("Hello, Pygame!", True, (255, 255, 255))  # Text, antialiasing, color
         text_position = (100, 200)
         self.screen.blit(text_surface, text_position)
-        print(f"Encrypt Clicked! Difficulty: {slider_value}")
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect, 0)
