@@ -11,6 +11,30 @@ import pygame_gui
 import tkinter as tk
 from tkinter import messagebox
 
+import tkinter as tk
+from tkinter import messagebox  # Use messagebox instead of simpledialog
+from cryptography.hazmat.primitives import serialization
+import hashlib
+
+class CustomDialog:
+    def __init__(self, private_key):
+        self.private_key = private_key
+        self.message = "Here is your hashed private key:"
+        # self.hashed_key = self.hash_private_key()
+
+    def show_dialog(self):
+        result = messagebox.showinfo("Hashed Private Key", f"{self.message}\n\n {self.private_key}")
+        return result
+
+# Example usage:
+if __name__ == "__main__":
+    example_private_key = None
+    dialog = CustomDialog(example_private_key)
+    dialog.show_dialog()
+
+
+
+
 
 class App:
     timer = 10
@@ -28,6 +52,7 @@ class App:
             self.private_key = key.read()
         hardness =hardness
         self.ANIM_TIME_INTERVAL =150
+
         
 
         self.hardness = int(hardness)
@@ -37,6 +62,8 @@ class App:
         self.set_timer()
         self.images = self.load_images()
         self.enc_instace=enc_instace
+        dialog = CustomDialog(self.private_key_to_10_digits(self.enc_instace.private_key))
+        dialog.show_dialog()
 
         self.tetris = Tetris(self, enc_instace)
         self.text = Text(self)
@@ -55,6 +82,26 @@ class App:
         self.cumulative_score = 0
         self.cumulative_score_valve = False
         self.encrypted_message_checker = True
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    def private_key_to_10_digits(self, private_key):
+        private_key_bytes = private_key.private_bytes(
+            encoding=serialization.Encoding.DER,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        sha256 = hashlib.sha256()
+        sha256.update(private_key_bytes)
+        result = int(sha256.hexdigest()[:10], 16)
+        self.ten_digit_key = result
+        return result
 
     def game_over(self, status):
         pg.font.init()

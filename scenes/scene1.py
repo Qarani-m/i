@@ -19,8 +19,6 @@ class TextInput:
         self.rect = pygame.Rect(x, y, width, height)
         self.color_inactive = pygame.Color('lightskyblue3')
         self.color_active = pygame.Color(0, 0, 255, 128)
-        # self.color_active = pygame.Color(0, 0, 255, 0)
-        # self.color_active = self.active_color.set_alpha(128)  
 
 
 
@@ -61,13 +59,8 @@ class TextInput:
 
         label_surface = font.render(self.label, True, BLACK)
         screen.blit(label_surface, (self.rect.x - label_surface.get_width() - 10, self.rect.y + 5))
-
-
-
-
-
-
-
+        
+        
 class Button:
     def __init__(self, x, y, width, height, label,manager,):
         self.manager = manager
@@ -102,9 +95,13 @@ class IntroScene:
         username_input = TextInput((screen_width - 150) // 2, 300, 150, 30, "Username:")
         message_input = TextInput((screen_width - 150) // 2, 350, 150, 30, "Message:")
         password_input = TextInput((screen_width - 150) // 2, 400, 150, 30, "Password:")
-        press_e_button = Button((screen_width - 230) // 2, 550, 200, 40, "Press Shift a", self.gameStateManager)
-        inputs = [username_input, message_input, password_input]
+        press_e_button = Button((screen_width - 230) // 2, 550, 200, 40, "Press Shift ctrl", self.gameStateManager)
+        press_b_button = Button((screen_width - 300) // 2, 950, 400, 40, "Please fill all the fields", self.gameStateManager)
+        
+        inputs = [username_input]
         buttons = [press_e_button]
+        
+        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -137,12 +134,14 @@ class IntroScene:
                 self.password = password_input.text
                 self.message = message_input.text
                 self.password_input = message_input.text
-                self.gameStateManager.setState("scene2")
-                with open("passfile.txt", "w") as passfile:
-                    passfile.write(self.password)
-
-
-                print(f"this is a password {self.password}")
-                break
+                if len(self.username) > 1:
+                    self.gameStateManager.setState("scene2")
+                    with open("passfile.txt", "w") as passfile:
+                        passfile.write(self.password)
+                    print(f"this is a password {self.password}")
+                    break
+                
+                else:
+                    buttons.append(press_b_button)
             pygame.display.flip()
 

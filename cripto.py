@@ -5,14 +5,13 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import serialization
 import os
-
+import hashlib
 
 class MessageEncryptionApp:
     def __init__(self, password):
-        # Derive a key from the password
+
         self.key = self.derive_key(password)
 
-        # Generate RSA key pair for encryption and decryption
         self.private_key = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048,
@@ -31,10 +30,32 @@ class MessageEncryptionApp:
         )
         key = kdf.derive(password.encode())
         return key
+    
+    
+    
+    def private_key_to_10_digits(private_key):
+        private_key_bytes = private_key.private_bytes(
+            encoding=serialization.Encoding.DER,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+
+        sha256 = hashlib.sha256()
+        sha256.update(private_key_bytes)
+        
+        # Extract the first 10 digits of the hash
+        result = int(sha256.hexdigest()[:10], 16)
+        
+        return result
+
+
+
+
+
 
     def encrypt_message(self, message):
         msg_bytes = message.encode("utf-8")
-        # Use the derived key for encryption
+
         ciphertext = self.public_key.encrypt(
             msg_bytes,
             padding.OAEP(
